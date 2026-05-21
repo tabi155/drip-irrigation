@@ -27,7 +27,6 @@ class _MockMapView extends StatelessWidget {
         builder: (context, state) {
           return Stack(
             children: [
-              /// 🗺 FAKE MAP
               GestureDetector(
                 onPanUpdate: (details) {
                   context.read<MockMapCubit>().moveMarker(details.delta);
@@ -39,8 +38,6 @@ class _MockMapView extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// 📍 MARKER (animated)
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 250),
                 left: state.offset.dx,
@@ -51,8 +48,6 @@ class _MockMapView extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
-
-              /// 🔍 SEARCH PANEL
               Positioned(
                 bottom: 100,
                 left: 16,
@@ -70,7 +65,7 @@ class _MockMapView extends StatelessWidget {
                         controller: controller,
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          hintText: "Search city (Bishkek, Osh...)",
+                          hintText: "Поиск",
                           hintStyle: TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(),
                         ),
@@ -88,7 +83,7 @@ class _MockMapView extends StatelessWidget {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text("Search"),
+                            : const Text("Поиск"),
                       ),
                       const SizedBox(height: 8),
                       Text(

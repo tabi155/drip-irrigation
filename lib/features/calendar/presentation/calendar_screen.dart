@@ -19,6 +19,7 @@ class CalendarScreen extends StatelessWidget {
       Zone(id: "zone2", name: "Огурцы 🥒", humidity: 60, temp: 26),
       Zone(id: "zone3", name: "Кукуруза 🌽", humidity: 35, temp: 30),
     ];
+
     DateTime focusedDay = DateTime.now();
 
     return BlocProvider(
@@ -28,86 +29,122 @@ class CalendarScreen extends StatelessWidget {
           final cubit = context.read<CalendarCubit>();
 
           return Scaffold(
+            backgroundColor: const Color(0xFFF6F8FA),
             appBar: AppBar(
-              title: const Text("🌱 Watering Calendar"),
+              title: const Text("🌱 Календарь полива"),
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: const Color(0xFFF6F8FA),
             ),
-            body: Column(
-              children: [
-                /// 🌱 ZONE SELECTOR
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: zones.map((z) {
-                      final selected = z.id == state.selectedZone;
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Зоны",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: zones.map((z) {
+                          final selected = z.id == state.selectedZone;
 
-                      return GestureDetector(
-                        onTap: () => cubit.selectZone(z.id),
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: selected ? Colors.green : Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12),
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            margin: const EdgeInsets.only(right: 10),
+                            child: ChoiceChip(
+                              label: Text(z.name),
+                              selected: selected,
+                              selectedColor: Colors.green,
+                              labelStyle: TextStyle(
+                                color: selected ? Colors.white : Colors.black,
+                              ),
+                              onSelected: (_) => cubit.selectZone(z.id),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: TableCalendar(
+                          firstDay: DateTime.utc(2020),
+                          lastDay: DateTime.utc(2030),
+                          focusedDay: focusedDay,
+                          headerStyle: const HeaderStyle(
+                            formatButtonVisible: false,
+                            titleCentered: true,
                           ),
-                          child: Text(z.name),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-
-                /// 📅 CALENDAR
-                TableCalendar(
-                  firstDay: DateTime.utc(2020),
-                  lastDay: DateTime.utc(2030),
-                  focusedDay: focusedDay,
-                  selectedDayPredicate: (day) {
-                    final list = state.data[state.selectedZone] ?? [];
-                    return list.contains(format(day));
-                  },
-                  onDaySelected: (selectedDay, fDay) {
-                    focusedDay = fDay;
-                    cubit.toggleDate(format(selectedDay));
-                  },
-                  calendarBuilders: CalendarBuilders(
-                    defaultBuilder: (context, day, _) {
-                      final list = state.data[state.selectedZone] ?? [];
-                      final selected = list.contains(format(day));
-
-                      return Container(
-                        margin: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: selected ? Colors.green : null,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "${day.day}",
-                            style: TextStyle(
-                              color: selected ? Colors.white : Colors.black,
+                          selectedDayPredicate: (day) {
+                            final list = state.data[state.selectedZone] ?? [];
+                            return list.contains(format(day));
+                          },
+                          onDaySelected: (selectedDay, fDay) {
+                            focusedDay = fDay;
+                            cubit.toggleDate(format(selectedDay));
+                          },
+                          calendarStyle: CalendarStyle(
+                            todayDecoration: BoxDecoration(
+                              color: Colors.orange.shade200,
+                              shape: BoxShape.circle,
+                            ),
+                            selectedDecoration: const BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: SwitchListTile(
+                        title: const Text(
+                          "🤖 Автоматический режим полива",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: const Text(
+                          "Автоматический режим полива",
+                        ),
+                        activeThumbColor: Colors.green,
+                        value: state.autoMode,
+                        onChanged: cubit.toggleAutoMode,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade100),
+                      ),
+                      child: const Text(
+                        "✔ Нажмите на дату, чтобы запланировать полив выбранной зоны",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
                 ),
-
-                const SizedBox(height: 20),
-
-                /// ⚙ AUTO MODE
-                SwitchListTile(
-                  title: const Text("🤖 Auto irrigation mode"),
-                  value: state.autoMode,
-                  onChanged: cubit.toggleAutoMode,
-                ),
-
-                const SizedBox(height: 10),
-
-                const Text(
-                  "✔ Tap date to schedule watering",
-                ),
-              ],
+              ),
             ),
           );
         },

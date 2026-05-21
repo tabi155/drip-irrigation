@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           centerTitle: false,
           title: Text(
-            'Hi, $name 👋',
+            'Привет, $name 👋',
             style: const TextStyle(color: Colors.black),
           ),
         ),
@@ -68,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 🌤 WEATHER
                 BlocBuilder<WeatherCubit, WeatherState>(
                   builder: (context, state) {
                     if (state is WeatherLoading) {
@@ -117,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const Text(
-                              "Bishkek",
+                              "Бишкек",
                               style: TextStyle(color: Colors.white70),
                             ),
                           ],
@@ -128,22 +127,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const SizedBox();
                   },
                 ),
-
-                /// 🌱 TITLE
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    "🌱 My Zones",
+                    "🌱 Мои зоны",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 10),
-
-                /// 🌱 ZONES LIST
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

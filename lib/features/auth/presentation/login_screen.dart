@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
 
   Future<void> login() async {
-    final savedEmail = await LocalStorage.getEmail();
+    final savedEmail = await LocalStorage.getName();
     final savedPassword = await LocalStorage.getPassword();
 
     if (emailController.text == savedEmail && passwordController.text == savedPassword) {
@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Wrong email or password'),
+          content: Text('Неверное имя или пароль'),
         ),
       );
     }
@@ -38,60 +38,62 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Вход'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            const Text(
-              '🌱 Smart Irrigation',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              const Text(
+                '🌱 Умное орошение',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 40),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Имя',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 20),
+              TextField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText:  'Пароль',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: login,
-                child: const Text('Login'),
+              const SizedBox(height: 40),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: login,
+                  child: const Text('Войти'),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const RegistrationScreen(),
-                  ),
-                );
-              },
-              child: const Text(
-                "Don't have an account? Register",
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const RegistrationScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                 "Нет аккаунта? Зарегистрироваться",
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

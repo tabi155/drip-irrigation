@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_diss/core/storage/shared_pref.dart';
 import 'package:movie_diss/features/auth/presentation/registration_screen.dart';
-import 'package:movie_diss/features/home/presentation/home_screen.dart';
+import 'package:movie_diss/features/home/presentation/nav_bar_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => const NavBarScreen(),
         ),
       );
     } else {

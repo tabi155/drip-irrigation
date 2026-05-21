@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_diss/core/storage/shared_pref.dart';
-import 'package:movie_diss/features/home/presentation/home_screen.dart';
+import 'package:movie_diss/features/home/presentation/nav_bar_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -15,16 +15,16 @@ class _LoginScreenState extends State<RegistrationScreen> {
   final passwordController = TextEditingController();
 
   Future<void> login() async {
-   await LocalStorage.saveUser(
-  email: emailController.text,
-  name: nameController.text,
-  password: passwordController.text,
-);
+    await LocalStorage.saveUser(
+      email: emailController.text,
+      name: nameController.text,
+      password: passwordController.text,
+    );
 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const HomeScreen(),
+        builder: (_) => const NavBarScreen(),
       ),
     );
   }
